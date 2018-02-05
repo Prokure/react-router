@@ -19,7 +19,8 @@ class Route extends React.Component {
     component: PropTypes.func,
     render: PropTypes.func,
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-    location: PropTypes.object
+    location: PropTypes.object,
+    horizontalRoute: PropTypes.object
   };
 
   static contextTypes = {
@@ -31,11 +32,12 @@ class Route extends React.Component {
   };
 
   static childContextTypes = {
-    router: PropTypes.object.isRequired
+    router: PropTypes.object.isRequired,
+    horizontalRouter: PropTypes.object
   };
 
   getChildContext() {
-    return {
+    let context = {
       router: {
         ...this.context.router,
         route: {
@@ -44,6 +46,10 @@ class Route extends React.Component {
         }
       }
     };
+    if (this.props.horizontalRoute) {
+      context["horizontalRouter"] = this.props.horizontalRoute;
+    }
+    return context;
   }
 
   state = {
@@ -112,10 +118,12 @@ class Route extends React.Component {
 
   render() {
     const { match } = this.state;
-    const { children, component, render } = this.props;
+    const { children, component, render, horizontalRoute } = this.props;
     const { history, route, staticContext } = this.context.router;
     const location = this.props.location || route.location;
     const props = { match, location, history, staticContext };
+
+    if (horizontalRoute) props["horizontalRoute"] = horizontalRoute;
 
     if (component) return match ? React.createElement(component, props) : null;
 

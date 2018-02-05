@@ -17,11 +17,12 @@ class Router extends React.Component {
   };
 
   static childContextTypes = {
-    router: PropTypes.object.isRequired
+    router: PropTypes.object.isRequired,
+    horizontalRouter: PropTypes.object
   };
 
   getChildContext() {
-    return {
+    let context = {
       router: {
         ...this.context.router,
         history: this.props.history,
@@ -31,10 +32,20 @@ class Router extends React.Component {
         }
       }
     };
+    if (this.state.horizontalRoute) {
+      context["horizontalRouter"] = {
+        horizontalRouteId: this.state.horizontalRouteId,
+        action: this.state.action
+      };
+    }
+    return context;
   }
 
   state = {
-    match: this.computeMatch(this.props.history.location.pathname)
+    match: this.computeMatch(this.props.history.location.pathname),
+    horizontalRoute: false,
+    horizontalRouteId: undefined,
+    action: undefined
   };
 
   computeMatch(pathname) {
@@ -58,9 +69,21 @@ class Router extends React.Component {
     // location in componentWillMount. This happens e.g. when doing
     // server rendering using a <StaticRouter>.
     this.unlisten = history.listen(() => {
-      this.setState({
-        match: this.computeMatch(history.location.pathname)
-      });
+      if (location.state && location.state.horizontalRoute) {
+        this.setState({
+          match: this.computeMatch(history.location.pathname),
+          horizontalRoute: true,
+          horizontalRouteId: location.state.horizontalRouteId,
+          action: location.state.action
+        });
+      } else {
+        this.setState({
+          match: this.computeMatch(history.location.pathname),
+          horizontalRoute: false,
+          horizontalRouteId: undefined,
+          action: undefined
+        });
+      }
     });
   }
 

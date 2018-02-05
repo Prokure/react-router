@@ -11,6 +11,8 @@
   "files": [
     "BrowserRouter.js",
     "HashRouter.js",
+    "HorizontalLink.js",
+    "HorizontalSwitch.js",
     "Link.js",
     "MemoryRouter.js",
     "NavLink.js",

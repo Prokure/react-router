@@ -9,6 +9,7 @@
     "Ryan Florence"
   ],
   "files": [
+    "HorizontalSwitch.js",
     "MemoryRouter.js",
     "Prompt.js",
     "Redirect.js",
