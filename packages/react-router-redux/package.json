@@ -1,6 +1,6 @@
 {
   "name": "react-horizontal-router-redux",
-  "version": "5.0.2",
+  "version": "5.0.1",
   "description": "Redux bindings for React Router",
   "repository": "ReactTraining/react-router",
   "license": "MIT",
