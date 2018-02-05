@@ -13,8 +13,13 @@ class Redirect extends React.Component {
   static propTypes = {
     computedMatch: PropTypes.object, // private, from <Switch>
     push: PropTypes.bool,
+    horizontal: PropTypes.bool,
     from: PropTypes.string,
-    to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
+    to: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+      PropTypes.bool
+    ]).isRequired
   };
 
   static defaultProps = {
@@ -28,7 +33,11 @@ class Redirect extends React.Component {
         replace: PropTypes.func.isRequired
       }).isRequired,
       staticContext: PropTypes.object
-    }).isRequired
+    }).isRequired,
+    horizontalRouter: PropTypes.shape({
+      horizontalRouteId: PropTypes.number,
+      prevPath: PropTypes.string
+    })
   };
 
   isStatic() {
@@ -81,13 +90,40 @@ class Redirect extends React.Component {
 
   perform() {
     const { history } = this.context.router;
-    const { push } = this.props;
-    const to = this.computeTo(this.props);
+    const { horizontalRouter } = this.context;
+    const { push, horizontal } = this.props;
+    let to = this.computeTo(this.props);
 
-    if (push) {
-      history.push(to);
+    warning(
+      !(horizontal && !this.context.horizontalRouter),
+      "Horizontal Redirect will not work outside a <HorizontalSwitch> component"
+    );
+
+    if (horizontalRouter && horizontal) {
+      let action = "open";
+      if (to === false) {
+        to = horizontalRouter.prevPath;
+        action = "close";
+      }
+      if (push) {
+        history.push(to, {
+          horizontalRoute: true,
+          action: action,
+          horizontalRouteId: horizontalRouter.horizontalRouteId
+        });
+      } else {
+        history.replace(to, {
+          horizontalRoute: true,
+          action: action,
+          horizontalRouteId: horizontalRouter.horizontalRouteId
+        });
+      }
     } else {
-      history.replace(to);
+      if (push) {
+        history.push(to);
+      } else {
+        history.replace(to);
+      }
     }
   }
 

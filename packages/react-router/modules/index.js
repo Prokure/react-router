@@ -1,3 +1,4 @@
+export HorizontalSwitch from "./HorizontalSwitch";
 export MemoryRouter from "./MemoryRouter";
 export Prompt from "./Prompt";
 export Redirect from "./Redirect";

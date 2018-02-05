@@ -2,7 +2,8 @@
   "lerna": "2.2.0",
   "version": "independent",
   "packages": [
-    "packages/*",
-    "website"
+    "packages/react-router",
+    "packages/react-router-dom",
+    "packages/react-router-redux"
   ]
 }

@@ -1,5 +1,6 @@
 export BrowserRouter from "./BrowserRouter";
 export HashRouter from "./HashRouter";
+export HorizontalSwitch from "./HorizontalSwitch";
 export Link from "./Link";
 export MemoryRouter from "./MemoryRouter";
 export NavLink from "./NavLink";

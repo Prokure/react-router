@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import invariant from "invariant";
+import warning from "warning";
 import { createLocation } from "history";
 
 const isModifiedEvent = event =>
@@ -12,9 +13,16 @@ const isModifiedEvent = event =>
 class Link extends React.Component {
   static propTypes = {
     onClick: PropTypes.func,
+    children: PropTypes.node,
     target: PropTypes.string,
+    horizontal: PropTypes.bool,
+    dontRenderComponent: PropTypes.bool,
     replace: PropTypes.bool,
-    to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+    to: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+      PropTypes.bool
+    ]).isRequired,
     innerRef: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
   };
 
@@ -29,7 +37,11 @@ class Link extends React.Component {
         replace: PropTypes.func.isRequired,
         createHref: PropTypes.func.isRequired
       }).isRequired
-    }).isRequired
+    }).isRequired,
+    horizontalRouter: PropTypes.shape({
+      horizontalRouteId: PropTypes.number,
+      prevPath: PropTypes.string
+    })
   };
 
   handleClick = event => {
@@ -44,22 +56,59 @@ class Link extends React.Component {
       event.preventDefault();
 
       const { history } = this.context.router;
-      const { replace, to } = this.props;
+      const { horizontalRouter } = this.context;
+      const { replace, horizontal } = this.props;
+      let { to } = this.props;
 
-      if (replace) {
-        history.replace(to);
+      if (horizontalRouter && horizontal) {
+        let action = "open";
+        if (to === false) {
+          to = this.context.horizontalRouter.prevPath;
+          action = "close";
+        }
+
+        if (replace) {
+          history.replace(to, {
+            horizontalRoute: true,
+            action: action,
+            horizontalRouteId: this.context.horizontalRouter.horizontalRouteId
+          });
+        } else {
+          history.push(to, {
+            horizontalRoute: true,
+            action: action,
+            horizontalRouteId: this.context.horizontalRouter.horizontalRouteId
+          });
+        }
       } else {
-        history.push(to);
+        if (replace) {
+          history.replace(to);
+        } else {
+          history.push(to);
+        }
       }
     }
   };
 
   render() {
-    const { replace, to, innerRef, ...props } = this.props; // eslint-disable-line no-unused-vars
+    const {
+      replace, // eslint-disable-line no-unused-vars
+      to,
+      innerRef,
+      children,
+      horizontal,
+      dontRenderComponent,
+      ...props
+    } = this.props;
 
     invariant(
       this.context.router,
       "You should not use <Link> outside a <Router>"
+    );
+
+    warning(
+      !(horizontal && !this.context.horizontalRouter),
+      "Horizontal Link will not work outside a <HorizontalSwitch> component"
     );
 
     invariant(to !== undefined, 'You must specify the "to" property');
@@ -71,8 +120,17 @@ class Link extends React.Component {
         : to;
 
     const href = history.createHref(location);
+    if (React.isValidElement(this.props.children) && dontRenderComponent) {
+      return React.cloneElement(children, { onClick: this.handleClick });
+    }
     return (
-      <a {...props} onClick={this.handleClick} href={href} ref={innerRef} />
+      <a
+        {...props}
+        children={children}
+        onClick={this.handleClick}
+        href={href}
+        ref={innerRef}
+      />
     );
   }
 }

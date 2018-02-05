@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Router } from "react-router";
+import { Router } from "react-horizontal-router";
 
 import { LOCATION_CHANGE } from "./reducer";
 

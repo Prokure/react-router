@@ -1,4 +1,4 @@
-import { matchPath } from "react-router";
+import { matchPath } from "react-horizontal-router";
 
 export const getLocation = state => state.router.location;
 
