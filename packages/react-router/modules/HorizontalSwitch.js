@@ -84,8 +84,8 @@ class HorizontalSwitch extends React.Component {
     const { children } = props;
     const location = props.location || route.location;
     let match, child;
-    let index,
-      childIndex = 0;
+    let index = 0;
+    let childIndex = 0;
     React.Children.forEach(children, element => {
       if (match == null && React.isValidElement(element)) {
         const {
@@ -133,8 +133,11 @@ class HorizontalSwitch extends React.Component {
 
   render() {
     let prevPath = "/";
+    let children = Array.isArray(this.props.children)
+      ? this.props.children
+      : [this.props.children];
     let childElements = this.state.childComponentsPath.map((c, index) => {
-      let child = this.props.children[c.index];
+      let child = children[c.index];
       let horizontalRoute = {
         horizontalRouteId: index,
         prevPath: prevPath

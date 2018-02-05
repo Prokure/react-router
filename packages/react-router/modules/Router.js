@@ -68,7 +68,7 @@ class Router extends React.Component {
     // Do this here so we can setState when a <Redirect> changes the
     // location in componentWillMount. This happens e.g. when doing
     // server rendering using a <StaticRouter>.
-    this.unlisten = history.listen(() => {
+    this.unlisten = history.listen(location => {
       if (location.state && location.state.horizontalRoute) {
         this.setState({
           match: this.computeMatch(history.location.pathname),
