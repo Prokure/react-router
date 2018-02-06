@@ -1,6 +1,6 @@
 {
   "name": "react-horizontal-router-redux",
-  "version": "5.0.6",
+  "version": "5.0.7",
   "description": "Redux bindings for React Router",
   "repository": "ReactTraining/react-router",
   "license": "MIT",
@@ -33,7 +33,7 @@
   "dependencies": {
     "history": "^4.7.2",
     "prop-types": "^15.6.0",
-    "react-horizontal-router": "^4.2.6"
+    "react-horizontal-router": "^4.2.7"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
