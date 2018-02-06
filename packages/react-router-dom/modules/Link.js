@@ -124,7 +124,13 @@ class Link extends React.Component {
       return React.cloneElement(children, { onClick: this.handleClick });
     }
     return (
-      <a {...props} onClick={this.handleClick} href={href} ref={innerRef} />
+      <a
+        {...props}
+        children={children}
+        onClick={this.handleClick}
+        href={href}
+        ref={innerRef}
+      />
     );
   }
 }
