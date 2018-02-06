@@ -121,7 +121,37 @@ class Route extends React.Component {
     const { children, component, render, horizontalRoute } = this.props;
     const { history, route, staticContext } = this.context.router;
     const location = this.props.location || route.location;
-    const props = { match, location, history, staticContext };
+
+    const openLink = (to, replace = false, horizontal = true) => {
+      if (horizontalRoute && horizontal) {
+        let action = "open";
+        if (to === false) {
+          to = horizontalRoute.prevPath;
+          action = "close";
+        }
+        if (replace) {
+          history.replace(to, {
+            horizontalRoute: true,
+            action: action,
+            horizontalRouteId: horizontalRoute.horizontalRouteId
+          });
+        } else {
+          history.push(to, {
+            horizontalRoute: true,
+            action: action,
+            horizontalRouteId: horizontalRoute.horizontalRouteId
+          });
+        }
+      } else {
+        if (replace) {
+          history.replace(to);
+        } else {
+          history.push(to);
+        }
+      }
+    };
+
+    const props = { match, location, history, staticContext, openLink };
 
     if (horizontalRoute) props["horizontalRoute"] = horizontalRoute;
 
