@@ -15,6 +15,7 @@ class Link extends React.Component {
     onClick: PropTypes.func,
     target: PropTypes.string,
     horizontal: PropTypes.bool,
+    dontRenderComponent: PropTypes.bool,
     replace: PropTypes.bool,
     to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
     innerRef: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
@@ -85,7 +86,15 @@ class Link extends React.Component {
   };
 
   render() {
-    const { replace, to, innerRef, horizontal, ...props } = this.props; // eslint-disable-line no-unused-vars
+    const {
+      replace,
+      to,
+      innerRef,
+      horizontal,
+      dontRenderComponent,
+      children,
+      ...props
+    } = this.props; // eslint-disable-line no-unused-vars
 
     invariant(
       this.context.router,
@@ -106,6 +115,16 @@ class Link extends React.Component {
         : to;
 
     const href = history.createHref(location);
+    if (React.isValidElement(this.props.children) && dontRenderComponent) {
+      return (
+        <children.type
+          {...children.props}
+          onClick={this.handleClick}
+          href={href}
+          ref={innerRef}
+        />
+      );
+    }
     return (
       <a {...props} onClick={this.handleClick} href={href} ref={innerRef} />
     );
