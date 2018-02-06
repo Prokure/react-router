@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import MemoryRouter from "react-router/MemoryRouter";
+import MemoryRouter from "react-horizontal-router/MemoryRouter";
 import NavLink from "../NavLink";
 
 describe("NavLink", () => {
