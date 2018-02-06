@@ -15,7 +15,11 @@ class Redirect extends React.Component {
     push: PropTypes.bool,
     horizontal: PropTypes.bool,
     from: PropTypes.string,
-    to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
+    to: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+      PropTypes.bool
+    ]).isRequired
   };
 
   static defaultProps = {

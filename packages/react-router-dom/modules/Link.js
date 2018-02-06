@@ -18,7 +18,11 @@ class Link extends React.Component {
     horizontal: PropTypes.bool,
     dontRenderComponent: PropTypes.bool,
     replace: PropTypes.bool,
-    to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+    to: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+      PropTypes.bool
+    ]).isRequired,
     innerRef: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
   };
 
