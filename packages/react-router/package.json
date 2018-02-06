@@ -1,6 +1,6 @@
 {
   "name": "react-horizontal-router",
-  "version": "4.2.3",
+  "version": "4.2.4",
   "description": "Declarative routing for React",
   "repository": "ReactTraining/react-router",
   "license": "MIT",
