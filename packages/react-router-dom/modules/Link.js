@@ -13,6 +13,7 @@ const isModifiedEvent = event =>
 class Link extends React.Component {
   static propTypes = {
     onClick: PropTypes.func,
+    children: PropTypes.node,
     target: PropTypes.string,
     horizontal: PropTypes.bool,
     dontRenderComponent: PropTypes.bool,
@@ -87,14 +88,14 @@ class Link extends React.Component {
 
   render() {
     const {
-      replace,
+      replace, // eslint-disable-line no-unused-vars
       to,
       innerRef,
+      children,
       horizontal,
       dontRenderComponent,
-      children,
       ...props
-    } = this.props; // eslint-disable-line no-unused-vars
+    } = this.props;
 
     invariant(
       this.context.router,
@@ -116,14 +117,7 @@ class Link extends React.Component {
 
     const href = history.createHref(location);
     if (React.isValidElement(this.props.children) && dontRenderComponent) {
-      return (
-        <children.type
-          {...children.props}
-          onClick={this.handleClick}
-          href={href}
-          ref={innerRef}
-        />
-      );
+      return React.cloneElement(children, { onClick: this.handleClick });
     }
     return (
       <a {...props} onClick={this.handleClick} href={href} ref={innerRef} />
