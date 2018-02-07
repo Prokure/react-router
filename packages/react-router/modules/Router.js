@@ -2,6 +2,7 @@ import warning from "warning";
 import invariant from "invariant";
 import React from "react";
 import PropTypes from "prop-types";
+import { parse } from "query-string";
 
 /**
  * The public API for putting history on context.
@@ -22,16 +23,20 @@ class Router extends React.Component {
   };
 
   getChildContext() {
+    let location = this.props.history.location;
+    location.query = parse(location.search);
+
     let context = {
       router: {
         ...this.context.router,
         history: this.props.history,
         route: {
-          location: this.props.history.location,
+          location: location,
           match: this.state.match
         }
       }
     };
+
     if (this.state.horizontalRoute) {
       context["horizontalRouter"] = {
         horizontalRouteId: this.state.horizontalRouteId,
@@ -53,6 +58,7 @@ class Router extends React.Component {
       path: "/",
       url: "/",
       params: {},
+      query: {},
       isExact: pathname === "/"
     };
   }
